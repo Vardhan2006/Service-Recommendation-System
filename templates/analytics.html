@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analytics Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Analytics Dashboard</h1>
+
+    <h2>Top 10 Services by Usage</h2>
+    <table>
+        <tr><th>Service</th><th>Bookings</th></tr>
+        {% for row in service_counts %}
+        <tr><td>{{ row.service_name }}</td><td>{{ row.count }}</td></tr>
+        {% endfor %}
+    </table>
+
+    <h2>Monthly Booking Trend</h2>
+    <table>
+        <tr><th>Month</th><th>Total Bookings</th></tr>
+        {% for row in monthly %}
+        <tr><td>{{ row.New_Date }}</td><td>{{ row.count }}</td></tr>
+        {% endfor %}
+    </table>
+
+    <h2>Top Association Rules (Why It Recommends)</h2>
+    <table>
+        <tr><th>Antecedent</th><th>Consequent</th><th>Support</th><th>Confidence</th><th>Lift</th></tr>
+        {% for r in top_rules %}
+        <tr>
+            <td>{{ r.antecedent }}</td>
+            <td>{{ r.consequent }}</td>
+            <td>{{ "%.3f"|format(r.support) }}</td>
+            <td>{{ "%.3f"|format(r.confidence) }}</td>
+            <td>{{ "%.3f"|format(r.lift) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/">Back to Recommendation</a>
+</div>
+</body>
+</html>
