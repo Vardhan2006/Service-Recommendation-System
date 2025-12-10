@@ -2,84 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test All Service Recommendations</title>
+    <title>All Service Recommendations</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            color: #333;
-            padding: 20px;
-        }
-        h1 {
-            color: #007bff;
-            text-align: center;
-        }
         table {
-            width: 100%;
+            width: 95%;
+            margin: 20px auto;
             border-collapse: collapse;
-            margin-top: 25px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 10px 15px;
+            border: 1px solid #ccc;
+            padding: 10px;
             text-align: left;
         }
         th {
-            background-color: #007bff;
-            color: white;
+            background-color: #000000;
         }
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        a {
-            text-decoration: none;
-            color: #007bff;
-            margin: 10px;
-        }
-        .btn-container {
+        h1 {
             text-align: center;
             margin-top: 20px;
+        }
+        .recommend-block {
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin: 10px 0;
+        }
+        .back-links {
+            text-align: center;
+            margin: 20px;
         }
     </style>
 </head>
 <body>
-<div class="container">
     <h1>All Service Recommendations</h1>
-    <p style="text-align:center;">This page shows all services and their top 3 recommended services.</p>
+    <p style="text-align:center;">This page shows all services and their top 3 recommended services (with support, confidence, and lift values).</p>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Input Service</th>
-                <th>Recommended Service</th>
-                <th>Support</th>
-                <th>Confidence</th>
-                <th>Lift</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for rec in all_recommendations %}
-            <tr>
-                <td>{{ rec.input_service }}</td>
-                <td>{{ rec.recommended_service }}</td>
-                <td>{{ rec.support }}</td>
-                <td>{{ rec.confidence }}</td>
-                <td>{{ rec.lift }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% for item in all_recommendations %}
+        <div class="recommend-block">
+            <h3>{{ item.input_service }}</h3>
+            <table>
+                <tr>
+                    <th>Recommended Service</th>
+                    <th>Support</th>
+                    <th>Confidence</th>
+                    <th>Lift</th>
+                </tr>
+                {% for rec in item.recommendations %}
+                <tr>
+                    <td>{{ rec.recommended_service }}</td>
+                    <td>{{ rec.support }}</td>
+                    <td>{{ rec.confidence }}</td>
+                    <td>{{ rec.lift }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
 
-    <div class="btn-container">
-        <a href="/">🏠 Back to Recommendation</a> |
-        <a href="/analytics">📊 Analytics Dashboard</a>
+    <div class="back-links">
+        <a href="/">Back to Recommendation</a> |
+        <a href="/analytics">Analytics Dashboard</a>
     </div>
-</div>
 </body>
 </html>

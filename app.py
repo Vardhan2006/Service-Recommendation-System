@@ -98,35 +98,41 @@ def test_all():
     for code, name in service_names.items():
         recs = get_recommendations(rules, code, top_n=3)
 
-        # If no recommendations were found
-        if not recs:
+        # If no recommendations found
+        if not recs or len(recs) == 0:
             all_recommendations.append({
                 "input_service": name,
-                "recommended_service": "No recommendations found",
-                "support": "-",
-                "confidence": "-",
-                "lift": "-"
+                "recommendations": [{
+                    "recommended_service": "No recommendations found",
+                    "support": "-",
+                    "confidence": "-",
+                    "lift": "-"
+                }]
             })
             continue
 
-        # Handle both dict and string results
+        # Handle both dict or string outputs safely
+        rec_list = []
         for r in recs:
-            if isinstance(r, dict):
-                all_recommendations.append({
-                    "input_service": name,
+            if isinstance(r, dict):  # when get_recommendations returns dicts
+                rec_list.append({
                     "recommended_service": r.get("recommended_service_name", "Unknown"),
                     "support": round(r.get("support", 0), 3),
                     "confidence": round(r.get("confidence", 0), 3),
                     "lift": round(r.get("lift", 0), 3)
                 })
-            else:
-                all_recommendations.append({
-                    "input_service": name,
+            else:  # fallback if it’s just a string
+                rec_list.append({
                     "recommended_service": str(r),
                     "support": "-",
                     "confidence": "-",
                     "lift": "-"
                 })
+
+        all_recommendations.append({
+            "input_service": name,
+            "recommendations": rec_list
+        })
 
     return render_template("test_all.html", all_recommendations=all_recommendations)
 
